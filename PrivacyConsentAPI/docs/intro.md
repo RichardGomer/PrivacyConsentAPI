@@ -17,7 +17,7 @@ as advertising networks.
 In the UK, at least, this has led to the proliferation of "cookie consent" dialogues on 
 websites that use cookies.  These consent dialogues can be a burden on site owners to
 implement and research from the HCI community suggests that users will become habituated
-to consenting to cookies simply to close the dialogue - Thus undermining the good
+to consenting to cookies simply to close the dialogue - Undermining the good
 intentions behind the directive.
 
 The Privacy Consent API is designed to store user consent to a range of common cookie
@@ -35,12 +35,24 @@ www.richardgomer.eu
 API
 -----
 
-The API itself is relatively simple.  Indeed, the most complex part of the system is
-to understand exactly what each "consent flag" actually indicates.  It's important
-that implementers understand what each flag means in order to legitimately claim
-user consent.
+The API documented here is normative - Any implementations of the API must implement
+all of the features described here, as they are described.
 
-Consent flags are stored as a DOM property, document.consent
+The API itself is relatively simple - Consisting of a list of "consent flags" that 
+indicate a user's consent to a range of common scenarios, and a function that is called
+when consent information becomes available or is updated.  Consent flags each indicate
+consent to a particular and specific scenario.  It is important to understand those
+scenarios if relying on the consent information provided by the API in order to
+comply with the user's wishes or any applicable legislation.  Each flag is described in
+detail below.
+
+Consent flags are stored as a DOM property, document.consent, which is itself an object.
+
+Each flag takes one of three values (true, false or null) to indicate whether the user has
+consented storage/retrieval of information in a particular scenario.  True indicates that
+the user has consented.  False indicates that the user has chosen to opt-out in this scenario.
+Null indicates that the user has not specified their consent - Websites may wish to ask the
+user for consent directly.
 
 For instance, to determine if the user consents to the use of "single site analytics" 
 (see the "Consent Flags" section below for a description of this and other flags).
@@ -61,6 +73,20 @@ For instance, to determine if the user consents to the use of "single site analy
 	}
 
 
+Because of the limitations of the various browser extension APIs, it cannot be assumed that
+consent information is available as soon as the page is ready.  Instead, the API will call 
+document.consentReady (provided that it is function) when the consent information becomes available.
+This allows websites to set up callbacks that will be fired as soon as consent information is 
+available, as shown below.
+
+	var doSomething = function()
+	{
+		alert("Consent information is ready");
+	}
+	
+	document.consentReady = doSomething;
+
+
 Consent Flags
 -------------
 
@@ -77,5 +103,15 @@ This flag does not give consent to:
 - Infer or make a connection between different values of the tracking cookie (for instance by trying to aggregate statistics for the same user across multiple sessions)
 
 
+
+Custom Consent Flags
+--------------------
+
+It would be beneficial, overall, for all implementations to share a common set of scenarios.
+
+However, implementations may, if absolutely necessary, add their own consent flags for scenarios not defined here.  They 
+must ensure that the scenario is well defined and that the flag's name is prefix with X, followed by a vendor-specific string.
+
+	X_ACME_NameOfScenario
  
 
