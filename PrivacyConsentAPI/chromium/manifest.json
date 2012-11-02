@@ -9,9 +9,15 @@
   	[
 	  	{
 	  		"matches": ["http://*/*", "https://*/*"],
-	  		"js": ["lib/jquery-1.7.2.min.js", "content.js"]
+	  		"js": ["lib/port.js", "content.js"]
 	  	}
   	],
+  	
+  "browser_action":
+   {
+    	"default_icon": "icon_small.png",
+    	"default_title": "Consent Preferences"
+   },
  
   "permissions":
   	[
