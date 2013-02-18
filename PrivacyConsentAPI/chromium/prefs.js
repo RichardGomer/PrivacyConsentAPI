@@ -1,7 +1,7 @@
 	var scenarios = {
 			
-		'flagName' : {'name': 'Name', 'desc': "Description"},
-		'flagName2' : {'name': 'Name', 'desc': "Description"}
+		'analytics_firstparty' : {'name': 'Anonymous Usage Statistics', 'desc': "Many websites collect anonymous usage statistics so that they can see whether visitors return to the website, how often they visit and which pages they are most interested in."},
+		'analytics_thirdparty' : {'name': 'Anonymous Usage Statistics (Third Party)', 'desc': "Some websites use 'third parties' (outside companies) to collect anonymous usage statistics  so that they can see whether visitors return to the website, how often they visit and which pages they are most interested in.  Third parties may collect information about your usage of multiple websites and possibly share the information that they collect between those websites."}
 			
 	};
 	
@@ -77,12 +77,83 @@
 				d.appendChild(desc);
 				d.appendChild(options);
 				
-				document.body.appendChild(d);
+				document.getElementById('prefs').appendChild(d);
 			};
 			
 			run();
 		}
+		
+		wizard();
+	}
+	
+	var wizard = function()
+	{
+		var div = document.getElementById('prefs');
+		
+		div.className = "wizard";
+		
+		console.log(div);
+		
+		div.firstElementChild.className = 'selected';
+		
+		var donext = function()
+		{
+			var selected = div.getElementsByClassName('selected');
+			
+			console.log(selected);
+			console.log(selected[0].tagName.toLowerCase());
+			
+			if(selected.length > 0 && selected[0].nextElementSibling != null && selected[0].nextElementSibling.tagName.toLowerCase() == 'div')
+			{
+				var s = selected[0];
+				
+				s.className = '';
+				s.nextElementSibling.className = 'selected';
+			}
+		}
+		
+		var doprev = function()
+		{
+			var selected = div.getElementsByClassName('selected');
+			
+			if(selected.length > 0 && selected[0].previousElementSibling != null)
+			{
+				var s = selected[0];
+				
+				s.className = '';
+				s.previousElementSibling.className = 'selected';
+			}
+		}
+		
+		var next = document.createElement('span');
+		next.className = 'next';
+		next.innerHTML = "&gt;";
+		next.onclick = donext;
+		
+		var prev = document.createElement('span');
+		prev.className = 'prev';
+		prev.innerHTML = "&lt;";
+		prev.onclick = doprev;
+		
+		div.appendChild(prev);
+		div.appendChild(next);
+		
+		var showall = document.createElement('span');
+		showall.className = 'showall';
+		showall.onclick = unwizard;
+		showall.innerHTML = "Show All";
+		
+		div.appendChild(showall);
+	}
+	
+	var unwizard = function()
+	{
+		document.getElementById('prefs').className = "";
 	}
 	
 	document.addEventListener("DOMContentLoaded", ready, false);
+	
+	
+	
+	
 	

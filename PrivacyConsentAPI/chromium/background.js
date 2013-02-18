@@ -60,7 +60,7 @@ function PrivacyConsentModel()
 	{
 		var restore = function(flags)
 		{
-			if(chrome.extension.lastError != undefined)
+			if(chrome.extension.lastError != undefined || typeof flags.consentFlags == 'undefined')
 			{
 				return;
 			}
